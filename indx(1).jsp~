@@ -1,0 +1,460 @@
+<%@ page import="java.sql.*, java.util.*" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=windows-1250">
+  <title>Inverted Index example</title>
+  </head>
+  <body>
+<STYLE>H2 {FONT-SIZE: 21pt; COLOR: maroon};  </STYLE>
+<center>
+<H2>Searching Module</H2>
+</center> 	
+<hr>
+    <br>
+    
+    <%
+      String m_url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+      String m_driverName = "oracle.jdbc.driver.OracleDriver";
+      
+      String m_userName = "lixin1"; //supply username
+      String m_password = "jinlixin339"; //supply password
+      
+      String addItemError = "";
+      ArrayList<String> a_list = new ArrayList<String>();
+      a_list.add("Null");
+      a_list.add("Ranked");
+      a_list.add("By Time");
+	
+      int imageID;
+
+      
+      Connection m_con;
+      String createString;
+      String selectString = "select itemName, description from item";
+      Statement stmt;
+      
+      try
+      {
+      
+        Class drvClass = Class.forName(m_driverName);
+        DriverManager.registerDriver((Driver)
+        drvClass.newInstance());
+        m_con = DriverManager.getConnection(m_url, m_userName, m_password);
+        
+      } 
+      catch(Exception e)
+      {      
+        out.print("Error displaying data: ");
+        out.println(e.getMessage());
+        return;
+      }
+
+      try
+      {
+             
+        //first try to see if we are adding any items to the database
+        if (request.getParameter("addRecord") != null)
+        {
+          if(!(request.getParameter("itemName").equals("") || request.getParameter("description").equals("")))
+          {
+             //disable the auto commit mode
+             m_con.setAutoCommit(false);
+            
+            Statement stmt2 = m_con.createStatement();
+            ResultSet rset2 = stmt2.executeQuery("select item_seq.nextVal from dual");
+            int nextItemId;
+            if(rset2.next())
+            {
+              nextItemId = rset2.getInt(1);
+            }
+            else    
+            {
+                m_con.close();
+                out.println("<b>Error: item_seq does not exist</b>");
+                return;       
+            }
+            m_con.setAutoCommit(true);
+          }
+          else
+          {
+            addItemError = "Item name or description is missing\n";
+          }
+        }
+        else if(request.getParameter("updateIndex") != null)
+        {
+        }      
+    %>
+
+
+    <b><%=addItemError%></b><br>
+    <form name=insertData method=post action=indx.jsp> 
+     <center>	
+      <table>
+        <tr>
+	<td>
+	    Patient name:
+	</td>
+          <td>
+            <input type=text name=pfirst_name placeholder="First_name">
+          </td>
+	  <td>
+          </td>
+	  <td>
+            <input type=text name=plast_name placeholder="Last_name">
+          </td>
+        </tr>
+	<tr>
+	<td>
+	    Doctor name:
+	</td>
+          <td>
+            <input type=text name=dfirst_name placeholder="First name">
+          </td>
+	  <td>
+          </td>
+	  <td>
+            <input type=text name=dlast_name placeholder="Last name">
+          </td>
+        </tr>
+
+	</tr>
+	<tr>
+        <td>
+	    Tprescribing_date From:
+	</td>
+          <td>
+            <input type=text name=prescribing_date_from placeholder="YY-MM-DD">
+          </td>
+	  <td>
+            to:
+          </td>
+          <td>
+            <input type=text name=prescribing_date_to placeholder="YY-MM-DD">
+          </td>
+	</tr>
+	<tr>
+        <td>
+	    Test_date From:
+	</td>
+          <td>
+            <input type=text name=test_date_from placeholder="YY-MM-DD">
+          </td>
+	  <td>
+            to:
+          </td>
+          <td>
+            <input type=text name=test_date_to placeholder="YY-MM-DD">
+          </td>
+	</tr>
+	<tr>
+        <td>
+	    Diagnosis:
+	</td>
+          <td>
+            <input type=text name=Dia placeholder="key words">
+          </td>
+	</tr>
+	<tr>
+        <td>
+	    Discrib:
+	</td>
+          <td>
+            <input type=text name=dis placeholder="key words">
+          </td>
+	</tr>
+
+	<tr>
+        <td>
+	    Test_Type:
+	</td>
+          <td>
+            <input type=text name=test_type placeholder="key words">
+          </td>
+	</tr>
+	<br>
+	<br>
+	<tr>
+	<td>
+	</td>
+	<td>
+	</td>
+	<td>
+	    <right>
+            <input type=submit value="Search" name="search">
+        </td>
+	</tr>
+      </table>
+	</center>
+          <table>
+	<tr>
+	  <td>
+	    Sorted By:
+	  </td>
+	  <td>
+		<select name = "item" >
+		<%
+			for (int i =0;i<a_list.size();i++)
+			{
+			    String anser = a_list.get(i);
+			    String an = "lol";
+			    out.println("<option value=\""+anser+"\">"+anser+"</opition>");	
+			};				
+		%>
+
+
+            </select>
+	</tr>
+
+    </table>
+      <%
+ 	  int counter = 0;
+	  int counter_dis =0;
+          int counter_dia =0;
+	  int counter_test = 0;  
+	  int counter_test_from =0;
+          int counter_test_to= 0;
+	  int counter_prescribing_to = 0;
+          int counter_prescribing_from = 0;
+	  int counter_doc_first = 0;
+	  int counter_doc_last = 0;
+	  int counter_pati_first = 0;
+	  int counter_pati_last = 0;
+	  int counter_radi_first = 0;
+	  int counter_radi_last = 0;
+
+          if (request.getParameter("search") != null)
+          {
+		//this is the basic query
+		String self_query = "SELECT rr.record_id, p1.first_name AS doc_first_name, p1.last_name AS doc_last_name, p2.first_name AS pati_first_name, p2.last_name AS pati_last_name, p3.first_name AS radi_first_name, p3.last_name AS radi_last_name, rr.test_type, rr.prescribing_date, rr.test_date, rr.diagnosis, rr.description FROM radiology_record rr, persons p1, persons p2, persons p3 WHERE rr.doctor_id = p1.person_id AND rr.patient_id = p2.person_id AND rr.radiologist_id = p3.person_id";
+          
+		String Query_end = " ORDER BY test_date DESC";
+
+		String Query_discrib = " AND contains(description, ? , 2) > 0 ";
+		
+		String Query_diagnosis = " AND contains(diagnosis, ? , 1) > 0 ";
+		
+		String Query_test = " AND contains(test_type, ? , 3) > 0 ";
+		
+		String Query_test_to =" AND rr.test_date <= ? ";
+		
+		String Query_test_from =" AND rr.test_date >= ? ";
+
+		String Query_prescribing_from =" AND rr.prescribing_date >= ? ";
+		
+		String Query_prescribing_to = " AND rr.prescribing_date <= ? ";
+
+		String Query_doctor_first = " AND contains(p1.first_name, ?, 4) > 0 ";
+
+		String Query_doctor_last = " AND contains(p1.last_name, ?, 5) > 0 ";
+
+		String Query_pati_first = " AND contains(p2.first_name, ?, 6) > 0 ";
+
+		String Query_pati_last = " AND contains(p2.last_name, ?, 7) > 0 ";
+
+		String Query_radi_first = " AND contains(p3.first_name, ?, 8) > 0 ";
+
+		String Query_radi_last = " AND contains(p3.last_name, ?, 9) > 0 ";
+		
+	String Query_patient = "(SELECT DISTINCT rr.record_id, p1.first_name AS doc_first_name, p1.last_name AS doc_last_name, p2.first_name AS pati_first_name, p2.last_name AS pati_last_name, p3.first_name AS radi_first_name, p3.last_name AS radi_last_name, rr.test_type, rr.prescribing_date, rr.test_date, rr.diagnosis, rr.description, pi.image_id FROM radiology_record rr, persons p1, persons p2, persons p3, pacs_images pi  WHERE rr.record_id = pi.record_id AND  rr.doctor_id = p1.person_id AND rr.patient_id = p2.person_id AND rr.radiologist_id = p3.person_id AND rr.patient_id = ?)";
+
+
+		if(!(request.getParameter("test_date_from").equals("")))
+            	{
+		      self_query = self_query + Query_test_from;
+		      counter = counter+1;
+		      counter_test_from = counter;
+		}
+
+		if(!(request.getParameter("test_date_to").equals("")))
+	        {
+		      self_query = self_query + Query_test_to;
+		      counter = counter+1;
+		      counter_test_to = counter;
+	    	}	
+
+		if(!(request.getParameter("prescribing_date_from").equals("")))
+                {
+		      self_query = self_query + Query_prescribing_from;
+		      counter = counter+1;
+		      counter_prescribing_from = counter;
+	        }
+
+		if(!(request.getParameter("prescribing_date_to").equals("")))
+            	{
+		      self_query = self_query + Query_prescribing_to;
+		      counter = counter+1;
+		      counter_prescribing_to = counter;
+	        }
+
+		if(!(request.getParameter("test_type").equals("")))
+            	{
+		      self_query = self_query + Query_test;
+		      counter = counter+1;
+		      counter_test = counter;
+	        }		
+	 	
+		if(!(request.getParameter("dis").equals("")))
+            	{
+	              self_query = self_query + Query_discrib;
+		      counter = counter+1;
+		      counter_dis = counter;
+	    	}
+	
+		if(!(request.getParameter("Dia").equals("")))
+            	{
+	              self_query = self_query + Query_diagnosis;
+		      counter = counter+1;
+		      counter_dia = counter;
+	    	}
+
+
+
+
+
+
+        	PreparedStatement doSearch = m_con.prepareStatement(self_query+Query_end);
+	  
+
+	if(!(request.getParameter("dis").equals("")))
+            {
+	      String display =  request.getParameter("dis");
+	      doSearch.setString(counter_dis, display);
+	    }
+
+	if(!(request.getParameter("test_type").equals("")))
+            {
+	      String test1 =  request.getParameter("test_type");
+	      doSearch.setString(counter_test, test1);
+	    }
+	if(!(request.getParameter("test_date_from").equals("")))
+            {
+	      String test_datefrom =  request.getParameter("test_date_from");
+	      doSearch.setString(counter_test_from, test_datefrom);
+	    }
+	if(!(request.getParameter("test_date_to").equals("")))
+            {
+	      String test_dateto =  request.getParameter("test_date_to");
+	      doSearch.setString(counter_test_to, test_dateto);
+	    }
+	if(!(request.getParameter("prescribing_date_from").equals("")))
+            {
+	      String prescribing_datefrom =  request.getParameter("prescribing_date_from");
+	      doSearch.setString(counter_prescribing_from, prescribing_datefrom);
+	    }
+	if(!(request.getParameter("prescribing_date_to").equals("")))
+            {
+	      String prescribing_dateto =  request.getParameter("prescribing_date_to");
+	      doSearch.setString(counter_prescribing_to, prescribing_dateto);
+	    }
+
+
+
+
+
+  
+
+	 if(!(request.getParameter("Dia").equals("")))
+            {
+	      String dia =  request.getParameter("Dia");
+	      doSearch.setString(counter_dia, dia);
+	    }
+ 
+
+	   
+	    String recordID1;
+
+            ResultSet rset2 = doSearch.executeQuery();
+
+	    boolean hasnext = false;
+	    if(rset2 != null && rset2.next())
+		{
+		  hasnext = true;
+		}
+            out.println("<table border=1>");
+            out.println("<tr>");
+            out.println("<th>Record ID</th>");
+            out.println("<th>Doctor First Name</th>");
+            out.println("<th>Doctor Last Name</th>");
+            out.println("<th>Patient First Name</th>");
+            out.println("<th>Patient Last Name</th>");
+            out.println("<th>Radiologist First Name</th>");
+            out.println("<th>Radiologist Last Name</th>");
+            out.println("<th>Test Type</th>");
+            out.println("<th>Prescribing Date</th>");
+            out.println("<th>Test Date</th>");
+            out.println("<th>Diagnosis</th>");
+            out.println("<th>Discription</th>");
+	    out.println("<th>Image</th>");
+            out.println("</tr>");
+            while (rset2.next()){
+              out.println("<tr>");
+              out.println("<td>");
+              out.println(rset2.getString(1));
+	      String recordID1 = rset2.getString(1);
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(2));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(3));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(4));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(5));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(6));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(7));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(8));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(9));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(10));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(11));
+              out.println("</td>");
+              out.println("<td>");
+              out.println(rset2.getString(12));
+              out.println("</td>");
+	      out.println("<td>");
+		out.println("<a href=\"GetOnePic?" + imageID + "\"><img src=\"GetOnePic?" + imageID +"\" style=\"display:block; width:100px; height:auto;\"></a>");
+	       
+             hasnext = rset2.next();
+	     while (hasnext &&(rset2.getString(1).equals(recordID1)))
+		 {
+                	imageID = rset2.getInt(13);
+                	out.println("<a href=\"GetOnePic?" + imageID + "\"><img src=\"GetOnePic?" + imageID +"\" style=\"display:block; width:100px; height:auto;\"></a>");
+		        hasnext = rset2.next();
+         	 }
+	    
+             out.println("</td>");
+             out.println("</tr>");
+             out.println("</tr>");
+            } 
+            out.println("</table>");
+         
+          }
+          m_con.close();
+        }
+        catch(SQLException e)
+        {
+          out.println("please enter the right things to search "+"SQLException: " +
+          e.getMessage());
+			m_con.rollback();
+        }
+      %>
+    </form>
+  </body>
+</html>
+
+

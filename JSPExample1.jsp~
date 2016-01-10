@@ -1,0 +1,6 @@
+<HTML> 
+    <BODY> 
+	Welcome to CMPUT391 Lab!	
+	<%= java.data()%>	
+    </BODY> 
+</HTML> 

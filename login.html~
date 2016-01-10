@@ -1,0 +1,57 @@
+<HTML>
+<HEAD>
+<TITLE>Login Page</TITLE>
+</HEAD>
+
+<a href="help.html" style="float: right;">HELP</a>
+<script language = "javascript">
+<!--
+
+function checkEmpty(){
+	if(LoginForm.USERID.value ==""){
+		window.alert("User name can not be empty");
+		return false;
+	}	
+	else if(LoginForm.PASSWD.value ==""){
+		window.alert("password can not be empty");
+		return false;
+	}	
+	
+	
+}
+
+-->
+</script>
+<BODY background = "2457331_223336890000_2.jpg"><CENTER>
+<!--This is the login page-->
+<H1 bgcolor=#0000ff><CENTER>Welcome to Lixin, Yu and Chongyang's Search Engine</CENTER></H1>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<BR>
+<FORM NAME="LoginForm" ACTION="login.jsp" METHOD="post" >
+
+<P>To login successfully, you need to submit a valid userid and password</P>
+<TABLE>
+<TR VALIGN=TOP ALIGN=LEFT>
+<TD><B><I>Userid:</I></B></TD>
+<TD><INPUT TYPE="text" NAME="USERID" VALUE=""><BR></TD>
+</TR>
+<TR VALIGN=TOP ALIGN=LEFT>
+<TD><B><I>Password:</I></B></TD>
+<TD><INPUT TYPE="password" NAME="PASSWD" VALUE=""></TD>
+</TR>
+</TABLE>
+
+<INPUT TYPE="submit" NAME="Submit" VALUE="Log In" onclick = "return checkEmpty();">
+
+</FORM>
+<FORM NAME="RegestForm" ACTION="regester.jsp" METHOD="post" >
+<INPUT TYPE="submit"NAME="Reset" VALUE="Regester">
+
+</FORM>
+</CENTER>
+</BODY>
+</HTML>

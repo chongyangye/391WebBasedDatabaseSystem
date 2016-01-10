@@ -1,0 +1,77 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<%@ page import="java.util.*" %>  
+<html>
+<head> 
+<title>Sample program on Servlet</title> 
+</head>
+<body> 
+	<%
+		ArrayList<String> al = new ArrayList<String>();
+		al.add("Patient_ID");
+		al.add("Doctor_ID");
+		al.add("Record_ID");
+		al.add("Radiologist_ID");
+		al.add("Prescribing_Date");
+		al.add("Diagnosis");
+		al.add("Description");
+	%>
+<STYLE>H2 {FONT-SIZE: 21pt; COLOR: maroon};  </STYLE>
+<center>
+<H2>Searching Module</H2>
+</center> 	
+<hr>
+<form name="Searching" method="GET" action="Searching.jsp">
+<table>
+  <tr>
+     <th>Search infor:</th>
+  </tr>
+  <tr>
+     <center>
+        <td></td>
+        <td>
+            <select name = "item" >
+		<%
+			int click = 0;
+			int counter= 0;
+			for (int i =0;i<al.size();i++)
+			{
+			    String anser = al.get(i);
+			    String an = "lol";
+			    out.println("<option value=\""+anser+"\">"+anser+"</opition>");	
+			};				
+		%>
+		<%!
+	 	public void function(){
+			System.out.println("<tr>gggggg</tr>");
+			};
+		%>
+
+            </select>
+	<td><input name="Na1" type="textfield" size="30" value= "lol"> </input></td>
+	<td ALIGN=CENTER COLSPAN="2"><input type="button" name="Button" value="ADD"></td> 
+     </center>
+	
+  </tr>	
+  <tr>
+	<td ALIGN=left COLSPAN="2"><input type="submit" name=".submit" value="Search"></td>
+  </tr>
+
+</table>
+	<%
+			if(request.getParameter("Button") != null)
+			{
+				out.println("<br>");
+				out.println("this is good");
+				out.println("<br>");
+			}
+			else
+            		{
+              			out.println("<br><b>Please enter text for quering</b>");
+            		}  
+
+	%>
+
+
+</form>
+</body> 
+</html>

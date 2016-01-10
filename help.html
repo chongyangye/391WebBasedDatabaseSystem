@@ -1,0 +1,330 @@
+<html>
+<head>
+<title>User Manual </title>
+</head>
+<body>
+
+<h2>Radiology Information System - User Manual</h2>
+
+<p>Hello user, welcome to use our "Radiology Information System" (RIS). This is
+an user manual to help you install and have a better understanding or our system.</p>
+
+
+<h2>Installation Guideline</h2>
+
+<p>
+<table>
+<tr>
+<td>1.Please run tomcat by entering "starttomcat" in your terminal</td> 
+</tr>
+
+<tr>
+<td>2.Please run following sql files under sqldeveloper.sh </td> 
+</tr>
+
+<tr>
+<td></td> <td>setup_new.sql(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>inverse_index.sql</td>
+</tr>
+
+<tr>
+<td></td> <td>drjobdml.sql</td>
+</tr>
+
+
+<tr>
+<td>3.Please copy following files under /catalina/webapps/ris/ </td>
+</tr>
+
+<tr>
+<td></td> <td>adminManag.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>AdminModify.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>analysisjsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>dataAnaly.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>help.html</td>
+</tr>
+
+<tr>
+<td></td> <td>login.html</td>
+</tr>
+
+<tr>
+<td></td> <td>login.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>loginSuc.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>loginSucD.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>loginSucP.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>loginSucR.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>radPic.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>regester.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>report.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>search_ad.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>search_doctor.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>search_patient.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>search_radi.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>update.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>upload.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td></td> <td>uploadRad.jsp(change the database name & password)</td>
+</tr>
+
+<tr>
+<td>4.Please copy following files under /catalina/webapps/ris/WEB-INF/ </td>
+</tr>
+
+<tr>
+<td></td> <td>web.xml</td>
+</tr>
+
+<tr>
+<td>5.Please copy following files under /catalina/webapps/ris/WEB-INF/lib/ </td>
+</tr>
+
+<tr>
+<td></td> <td>commons-fileupload-1.0.jar</td>
+</tr>
+
+<tr>
+<td></td> <td>servlet-api.jar</td>
+</tr>
+
+<tr>
+<td>6.Please copy following files under /catalina/webapps/ris/WEB-INF/classes/ </td>
+</tr>
+
+<tr>
+<td></td> <td>GetOnePic.java(change the database name & password, and compile)</td>
+</tr>
+
+<tr>
+<td>After all above steps, you may run the system by entering http://machine_name:your_port_number/ris/login.html </td>
+</tr>
+
+</table>
+</p>
+
+<h2>Login Module</h2>
+
+<p>Registered users are able to login in the system by correctly entering there User ID and 
+Password. If you are not registered in our system, you may click on the "register" bottom.  </p>
+
+<h2>Register</h2>
+<p>
+<table>
+<tr>
+<td>User ID - </td>
+<td>Please enter your person id.</td>
+</tr>
+
+<tr>
+<td>FirstName - </td>
+<td>Please enter your first name.</td>
+</tr>
+
+<tr>
+<td>LastName - </td>
+<td>Please enter your last name.</td>
+</tr>
+
+<tr>
+<td>Password - </td>
+<td>Create a password of your own.</td>
+</tr>
+
+<tr>
+<td>Re-Password - </td>
+<td>Has to be the same as above.</td>
+</tr>
+
+<tr>
+<td>Class - </td>
+<td>Please choose your class.</td>
+</tr>
+
+<tr>
+<td></td>
+<td>Administer - Able to access and edit all users' information and records. </td>
+</tr>
+
+<tr>
+<td></td>
+<td>Doctor - Able to search records about his/her patients. </td>
+</tr>
+
+<tr>
+<td></td>
+<td>Patient - Able to search records about themselves. </td>
+</tr>
+
+<tr>
+<td></td>
+<td>Radiologist  - Able to search records about his/her patients and upload radiology images. </td>
+</tr>
+
+<tr>
+<td>Address - </td>
+<td>Please enter your address.</td>
+</tr>
+
+<tr>
+<td>Email - </td>
+<td>Please enter your email.</td>
+</tr>
+
+<tr>
+<td>Phone - </td>
+<td>Please enter you phone number.</td>
+</tr>
+</table>
+</p>
+
+<h2>Welcome Module</h2>
+<p>After login, user are able to see this page. In this page, there is an account information
+displayed on the top of the page. Also, you are albe to edit your own account information. You
+ may just simply enter the blanks that you wish to modify to upload your information.</p>
+
+<p>There is also a search option for each user. However, for the security issue, you are
+only able to search records about you. </p>
+
+<p>Also there are different function options according to your class. </p>
+
+<p>
+<table>
+<tr>
+<td>Administer</td> <td>- Able to use "Search" (Search all records), "Management" (edit and 
+manage all acounts), "Data Analysis" (Generate a data anaysis) </td>
+</tr>
+
+<tr>
+<td>Doctor</td> <td>- Able to use "Search" (Search all his/her patients' records) </td>
+</tr>
+
+<tr>
+<td>Patient</td> <td>- Able to use "Search" (Search all his/her records) </td>
+</tr>
+
+<tr>
+<td>Radiologist</td> <td>- Able to use "Search" (Search all his/her patients' records), "UploadPic" 
+(Upload radiology images to records), "UploadInfo" (Upload radiology records)  </td>
+</tr>
+</table>
+</p>
+
+<h2>UploadPic Module</h2>
+<p>This module is used by radiologis to upload radiology images.</p>
+<p>The user can simply click on "Browse..." to select one or more images, and click "Upload".</p>
+
+
+<h2>UploadInfo Module</h2>
+<p>This module is used by radiologis to upload radiology records.</p>
+<p>The user are able to fill in all blanks provided about records and click on "Process" to
+upload records.</p>
+
+<h2>Manaegement Module</h2>
+<p>This module is used by administer to edit or manage all accounts.</p>
+<p>There is a table of all users and their information. The administer can simply enter the
+person_id which he/she wants to edit in the box below. After click on "Managnment", the 
+administer is able to edit and manage all acount by fill in boxes which he/she wants to edit.</p>
+
+<h2>Report Module</h2>
+<p>This module is used by administer to generate a report about specified diagnosis.</p>
+<p>After the administer specified a diagnosis and time period, the administer may click on "Report". 
+After that it will generate a table of all information of patient about that diagnosis.</p>
+
+<h2>Search Module</h2>
+<p>This module is able to be used by users in all class. It is able to search records of some specified
+search conditions.</p>
+<p>In this page, you can choose from several search conditions.  </p>
+
+<p>
+<table>
+<tr>
+<td>First & Last Names</td> <td>- You may enter some names according to your search.</td>
+</tr>
+
+<tr>
+<td>Diagnosis</td> <td>- You may enter key words seperated by "," about diagnosis.</td>
+</tr>
+
+<tr>
+<td>Test Type</td> <td>- You may enter key words seperated by "," about test type.</td>
+</tr>
+
+<tr>
+<td>Description</td> <td>- You may enter key words seperated by "," about description.</td>
+</tr>
+
+<tr>
+<td>Time Period </td> <td>- You may enter time period about your search in "DD-MM-YY" format.</td>
+</tr>
+</table>
+</p>
+
+<h2>Data Analysis Module</h2>
+<p>This module is used by administer to generate a data analysis report.</p>
+<p>The administer may select some specified conditions such as patient id, test type and time period
+and the administer may also choose to let the report to group by yearly, monthly or weekly.</p>
+
+<h2>Contact</h2>
+<p>Lixin Jin    Email:lixin1@ualberta.ca</p>
+<p>Yu Zuo       Email:zuo2@ualberta.ca</p>
+<p>Chongyang Ye Email:cye2@ualberta.ca</p>
+
+
+</body>
+</html>

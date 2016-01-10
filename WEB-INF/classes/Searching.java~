@@ -1,0 +1,28 @@
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class Searching extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+
+		String item = request.getParameter("item");
+		String Na1 =  request.getParameter("Na1");
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 " +
+			"Transitional//EN\">\n" +
+			"<HTML>\n" +
+			"<HEAD><TITLE>Searching</TITLE></HEAD>\n" +
+			"<BODY>\n" +
+			"<H1>" +
+			item  + 
+			Na1 +
+			"</H1>\n" +
+			"</BODY></HTML>");
+		out.flush();
+		out.close();
+	
+	}
+
+}
